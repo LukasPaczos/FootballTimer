@@ -8,8 +8,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+
+    private MyTimer myTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +21,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        myTimer = new MyTimer(2, this);
+
+        LinearLayout timerLayout = (LinearLayout) findViewById(R.id.timer_layout);
+        timerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myTimer.start();
+            }
+        });
     }
 
     @Override
