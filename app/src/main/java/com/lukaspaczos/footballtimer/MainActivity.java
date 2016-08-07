@@ -1,5 +1,6 @@
 package com.lukaspaczos.footballtimer;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,10 +11,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         myTimer.updateViews();
 
         listView = (ListView) findViewById(R.id.event_list);
-        
+
 
         LinearLayout timerLayout = (LinearLayout) findViewById(R.id.timer_layout);
         timerLayout.setOnClickListener(new View.OnClickListener() {
