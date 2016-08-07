@@ -108,4 +108,11 @@ public class MyTimer extends Handler{
     public boolean isRunning() {
         return this.isRunning;
     }
+
+    public String getTime() {
+        String time = minutesHighView.getText().toString()
+                + minutesLowView.getText().toString() + ":" + secondsHighView.getText().toString()
+        + secondsLowView.getText().toString();
+        return time;
+    }
 }

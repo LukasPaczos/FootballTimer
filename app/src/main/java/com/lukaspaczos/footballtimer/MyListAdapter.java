@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 
 import java.util.List;
 
+//TODO all of this shit
 public class MyListAdapter extends ArrayAdapter<Event> {
 
     private Context context;

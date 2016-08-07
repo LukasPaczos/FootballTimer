@@ -99,6 +99,7 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/button_yellow_card"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@mipmap/ic_yellow_card"
@@ -115,6 +116,7 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/button_red_card"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@mipmap/ic_red_card"
@@ -130,6 +132,7 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/button_goal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@mipmap/ic_goal"
@@ -145,6 +148,7 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/button_other"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@mipmap/ic_other"

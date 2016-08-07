@@ -2,6 +2,7 @@ package com.lukaspaczos.footballtimer;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,19 +13,25 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private MyTimer myTimer;
     private ListView listView;
+    private List<Event> events;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         myTimer.updateViews();
 
         listView = (ListView) findViewById(R.id.event_list);
-
 
         LinearLayout timerLayout = (LinearLayout) findViewById(R.id.timer_layout);
         timerLayout.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +83,18 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+        ImageView buttonYellowCard = (ImageView) findViewById(R.id.button_yellow_card);
+        buttonYellowCard.setOnClickListener(new buttonOnClickListener());
+
+        ImageView buttonRedCard = (ImageView) findViewById(R.id.button_red_card);
+        buttonRedCard.setOnClickListener(new buttonOnClickListener());
+
+        ImageView buttonGoal = (ImageView) findViewById(R.id.button_goal);
+        buttonGoal.setOnClickListener(new buttonOnClickListener());
+
+        ImageView buttonOther = (ImageView) findViewById(R.id.button_other);
+        buttonOther.setOnClickListener(new buttonOnClickListener());
     }
 
     @Override
@@ -99,5 +117,63 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class buttonOnClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            if (view.getId() == R.id.button_yellow_card) {
+                addToEventList(myTimer.getTime(), Event.YELLOW_CARD);
+            } else if (view.getId() == R.id.button_red_card) {
+                addToEventList(myTimer.getTime(), Event.RED_CARD);
+            } else if (view.getId() == R.id.button_goal) {
+                addToEventList(myTimer.getTime(), Event.GOAL);
+            } else if (view.getId() == R.id.button_other) {
+                addToEventList(myTimer.getTime(), Event.OTHER);
+            }
+        }
+    }
+
+    private void addToEventList(final String time, final int type) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        final EditText inputView = new EditText(MainActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        inputView.setLayoutParams(lp);
+        switch (type) {
+            case Event.YELLOW_CARD:
+                dialogBuilder.setTitle(R.string.dialog_yellow_card_title);
+                break;
+            case Event.RED_CARD:
+                dialogBuilder.setTitle(R.string.dialog_red_card_title);
+                break;
+            case Event.GOAL:
+                dialogBuilder.setTitle(R.string.dialog_goal_title);
+                break;
+            case Event.OTHER:
+                dialogBuilder.setTitle(R.string.dialog_other_title);
+                break;
+        }
+        dialogBuilder.setView(inputView);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        dialogBuilder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //TODO uncomment when list adapter done
+                //events.add(new Event(time, type, inputView.getText().toString()));
+                dialogInterface.dismiss();
+            }
+        });
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.show();
     }
 }
