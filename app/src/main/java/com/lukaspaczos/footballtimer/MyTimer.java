@@ -8,9 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-/**
- * Created by Lukas Paczos on 07-Aug-16.
- */
 public class MyTimer extends Handler{
     private int secondsLow;
     private int secondsHigh;
@@ -23,6 +20,7 @@ public class MyTimer extends Handler{
     private TextView minutesLowView;
     private TextView minutesHighView;
     private Context mainContext;
+    private boolean isRunning;
 
     private final int MSG_START = 1;
     private final int MSG_CONTINUE = 2;
@@ -37,12 +35,7 @@ public class MyTimer extends Handler{
         this.halfLength = halfLength;
         minutesPassed = 0;
         mainContext = context;
-        View rootView = ((Activity)mainContext).getWindow().getDecorView().findViewById(android.R.id.content);
-        secondsLowView = (TextView) rootView.findViewById(R.id.seconds_low);
-        secondsHighView = (TextView) rootView.findViewById(R.id.seconds_high);
-        minutesLowView = (TextView) rootView.findViewById(R.id.minutes_low);
-        minutesHighView = (TextView) rootView.findViewById(R.id.minutes_high);
-        updateViews();
+        isRunning = false;
     }
 
     public void start() {
@@ -58,6 +51,7 @@ public class MyTimer extends Handler{
         switch (msg.what) {
             case MSG_START:
                 Log.i("Timer", "Started");
+                isRunning = true;
                 this.sendEmptyMessageDelayed(MSG_CONTINUE, 1000);
                 break;
             case MSG_CONTINUE:
@@ -66,13 +60,14 @@ public class MyTimer extends Handler{
                 break;
             case MSG_STOP:
                 Log.i("Timer", "Stopped");
+                isRunning = false;
                 this.removeMessages(MSG_CONTINUE);
                 minutesPassed = 0;
                 break;
         }
     }
 
-    private void updateViews() {
+    public void updateViews() {
         secondsLow++;
         if (secondsLow > 9) {
             secondsLow = 0;
@@ -100,5 +95,17 @@ public class MyTimer extends Handler{
         if (minutesPassed == halfLength) {
             stop();
         }
+    }
+
+    public void setViews(TextView secondsLowView, TextView secondsHighView,
+                          TextView minutesLowView, TextView minutesHighView) {
+        this.secondsLowView = secondsLowView;
+        this.secondsHighView = secondsHighView;
+        this.minutesLowView = minutesLowView;
+        this.minutesHighView = minutesHighView;
+    }
+
+    public boolean isRunning() {
+        return this.isRunning;
     }
 }

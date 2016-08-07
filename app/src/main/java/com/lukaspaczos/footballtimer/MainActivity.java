@@ -1,19 +1,24 @@
 package com.lukaspaczos.footballtimer;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private MyTimer myTimer;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +28,47 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         myTimer = new MyTimer(2, this);
+        myTimer.setViews((TextView) findViewById(R.id.seconds_low), (TextView) findViewById(R.id.seconds_high),
+                (TextView) findViewById(R.id.minutes_low), (TextView) findViewById(R.id.minutes_high));
+        myTimer.updateViews();
+
+        listView = (ListView) findViewById(R.id.event_list);
+        
 
         LinearLayout timerLayout = (LinearLayout) findViewById(R.id.timer_layout);
         timerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myTimer.start();
+                final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                if (myTimer.isRunning()) {
+                    dialogBuilder.setTitle(R.string.stop_timer);
+                    dialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            myTimer.stop();
+                            dialogInterface.dismiss();
+                            Toast.makeText(MainActivity.this, "Timer stopped.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    dialogBuilder.setTitle(R.string.start_timer);
+                    dialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            myTimer.start();
+                            dialogInterface.dismiss();
+                            Toast.makeText(MainActivity.this, "Timer started.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                AlertDialog dialog = dialogBuilder.create();
+                dialog.show();
             }
         });
     }
