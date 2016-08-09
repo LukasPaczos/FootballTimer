@@ -1,22 +1,14 @@
 package com.lukaspaczos.footballtimer;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,14 +16,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lukaspaczos.footballtimer.event.Event;
+import com.lukaspaczos.footballtimer.event.EventAdapter;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private MyTimer myTimer;
     private ListView listView;
-    private List<Event> events;
+    private ArrayList<Event> events;
+    private EventAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +41,11 @@ public class MainActivity extends AppCompatActivity {
                 (TextView) findViewById(R.id.minutes_low), (TextView) findViewById(R.id.minutes_high));
         myTimer.updateViews();
 
+        events = new ArrayList<>();
+
         listView = (ListView) findViewById(R.id.event_list);
+        adapter = new EventAdapter(this, events);
+        listView.setAdapter(adapter);
 
         LinearLayout timerLayout = (LinearLayout) findViewById(R.id.timer_layout);
         timerLayout.setOnClickListener(new View.OnClickListener() {
@@ -167,8 +167,8 @@ public class MainActivity extends AppCompatActivity {
         dialogBuilder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //TODO uncomment when list adapter done
-                //events.add(new Event(time, type, inputView.getText().toString()));
+                events.add(0, new Event(time, type, inputView.getText().toString()));
+                adapter.notifyDataSetChanged();
                 dialogInterface.dismiss();
             }
         });

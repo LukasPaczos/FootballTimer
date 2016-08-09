@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import com.lukaspaczos.footballtimer.event.Event;
+
 import java.util.List;
 
 //TODO all of this shit
