@@ -1,10 +1,15 @@
 package com.lukaspaczos.footballtimer;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -39,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        myTimer = new MyTimer(2, this);
+        myTimer = new MyTimer(this);
         myTimer.setViews((TextView) findViewById(R.id.seconds_low), (TextView) findViewById(R.id.seconds_high),
                 (TextView) findViewById(R.id.minutes_low), (TextView) findViewById(R.id.minutes_high));
         myTimer.updateViews();
@@ -69,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             myTimer.stop();
                             dialogInterface.dismiss();
-                            Toast.makeText(MainActivity.this, "Timer stopped.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
@@ -79,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             myTimer.start();
                             dialogInterface.dismiss();
-                            Toast.makeText(MainActivity.this, "Timer started.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -116,13 +119,159 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (id == R.id.action_reset) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.reset_confirmation))
+                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            events.clear();
+                            adapter.notifyDataSetChanged();
+                            myTimer.stop();
+                            myTimer.reset();
+                            myTimer.updateViews();
+                            Toast.makeText(MainActivity.this, getString(R.string.reset_done), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setCancelable(true)
+                    .show();
+            return true;
+        }
         if (id == R.id.action_settings) {
+            final SharedPreferences sharedPref = this.getSharedPreferences(this.getResources().getString(R.string.preferences), Context.MODE_PRIVATE);
+            final SharedPreferences.Editor editor = sharedPref.edit();
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.choose_half_length))
+                    .setSingleChoiceItems(getResources()
+                            .getStringArray(R.array.settings_half_length), 0, null)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.dismiss();
+                            int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                            switch (selectedPosition) {
+                                case 0:
+                                    editor.putInt(MainActivity.this.getResources()
+                                            .getString(R.string.preferences_half_length), 45);
+                                    myTimer.setHalfLength(45);
+                                    Toast.makeText(MainActivity.this, String.format(getString(
+                                            R.string.half_lengt_changed), 45), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 1:
+                                    editor.putInt(MainActivity.this.getResources()
+                                            .getString(R.string.preferences_half_length), 30);
+                                    myTimer.setHalfLength(30);
+                                    Toast.makeText(MainActivity.this, String.format(getString(
+                                            R.string.half_lengt_changed), 30), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 2:
+                                    editor.putInt(MainActivity.this.getResources()
+                                            .getString(R.string.preferences_half_length), 20);
+                                    myTimer.setHalfLength(20);
+                                    Toast.makeText(MainActivity.this, String.format(getString(
+                                            R.string.half_lengt_changed), 20), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 3:
+                                    editor.putInt(MainActivity.this.getResources()
+                                            .getString(R.string.preferences_half_length), 15);
+                                    myTimer.setHalfLength(15);
+                                    Toast.makeText(MainActivity.this, String.format(getString(
+                                            R.string.half_lengt_changed), 15), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 4:
+                                    editor.putInt(MainActivity.this.getResources()
+                                            .getString(R.string.preferences_half_length), 10);
+                                    myTimer.setHalfLength(10);
+                                    Toast.makeText(MainActivity.this, String.format(getString(
+                                            R.string.half_lengt_changed), 10), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 5:
+                                    editor.putInt(MainActivity.this.getResources()
+                                            .getString(R.string.preferences_half_length), 5);
+                                    myTimer.setHalfLength(5);
+                                    Toast.makeText(MainActivity.this, String.format(getString(
+                                            R.string.half_lengt_changed), 5), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 6:
+                                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                                    final EditText inputView = new EditText(MainActivity.this);
+                                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams.MATCH_PARENT,
+                                            LinearLayout.LayoutParams.MATCH_PARENT);
+                                    inputView.setLayoutParams(lp);
+                                    inputView.setRawInputType(Configuration.KEYBOARD_12KEY);
+                                    dialogBuilder.setView(inputView);
+                                    dialogBuilder.setCancelable(true);
+                                    dialogBuilder.setTitle(getString(R.string.write_half_length));
+                                    dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                        }
+                                    });
+                                    dialogBuilder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                            int time = Double.valueOf(inputView.getText().toString()).intValue();
+                                            editor.putInt(MainActivity.this.getResources()
+                                                    .getString(R.string.preferences_half_length),
+                                                    time);
+                                            editor.apply();
+                                            myTimer.setHalfLength(time);
+                                            Toast.makeText(MainActivity.this, String.format(getString(
+                                                    R.string.half_lengt_changed), time), Toast.LENGTH_SHORT).show();
+                                            Log.i("half length preference", String.valueOf(
+                                                    sharedPref.getInt(getString(R.string.preferences_half_length), 45)));
+                                        }
+                                    });
+                                    AlertDialog alertDialog = dialogBuilder.create();
+                                    alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                                    alertDialog.show();
+                                    break;
+                            }
+                            editor.apply();
+                            Log.i("half length preference", String.valueOf(
+                                    sharedPref.getInt(getString(R.string.preferences_half_length), 45)));
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .show();
             return true;
         }
         if (id == R.id.action_about) {
+            //TODO make this shit to look good
+            final TextView textView = new TextView(MainActivity.this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            lp.setMargins(16, 16, 16, 16);
+            textView.setLayoutParams(lp);
+            textView.setText(getString(R.string.about_text));
+            new AlertDialog.Builder(this)
+                    .setView(textView)
+                    .setTitle(getString(R.string.action_about))
+                    .setCancelable(true)
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .show();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

@@ -2,6 +2,28 @@
     <string name="app_name">FootballTimer</string>
     <string name="action_settings">Settings</string>
     <string name="action_about">About</string>
+    <string name="action_reset">Reset</string>
+
+    <string name="preferences">preferences_football_timer</string>
+    <string name="preferences_half_length">preferences_half_length</string>
+
+    <string name="reset_confirmation">Are you sure you want to reset?</string>
+    <string name="reset_done">Reset completed.</string>
+
+    <array name="settings_half_length">
+        <item>45 minutes</item>
+        <item>30 minutes</item>
+        <item>20 minutes</item>
+        <item>15 minutes</item>
+        <item>10 minutes</item>
+        <item>5 minutes</item>
+        <item>Custom</item>
+    </array>
+    <string name="choose_half_length">Choose half length (minutes)</string>
+    <string name="write_half_length">Half length</string>
+    <string name="half_lengt_changed">Half length changed to %d min</string>
+
+    <string name="change_of_half_length">Half length: %d min</string>
 
     <string name="start_timer">Start timer?</string>
     <string name="stop_timer">Stop timer?</string>
@@ -10,6 +32,11 @@
     <string name="add">Add</string>
     <string name="ok">OK</string>
     <string name="confirm">Confirm</string>
+
+    <string name="timer_stopped">Timer stopped.</string>
+    <string name="timer_started">Timer started.</string>
+    <string name="half_ended">Half ended.</string>
+    <string name="match_ended">Match ended.</string>
 
     <string name="dialog_yellow_card_title">Who received yellow card?</string>
     <string name="dialog_red_card_title">Who received red card?</string>
@@ -20,5 +47,13 @@
     <string name="menu_event_list_delete">Delete</string>
     <string name="event_edit">Edit event message?</string>
     <string name="event_delete">Delete event?</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="about_text">Icon projects:\n
+    <b>Michal Wojtas</b>, <b>Dorota Wojtas</b>\n\n
+    Coding and everything else:\n
+    <b>Lukas Paczos</b>\n\n
+    If you find any bugs or maybe you\'d like to share some feedback,
+        feel free to send me an e-mail: lukas.paczos@gmail.com. Thanks!</string>
 
 </resources>

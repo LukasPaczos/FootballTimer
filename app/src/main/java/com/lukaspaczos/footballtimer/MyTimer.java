@@ -2,11 +2,14 @@ package com.lukaspaczos.footballtimer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MyTimer extends Handler{
     private int secondsLow;
@@ -15,6 +18,7 @@ public class MyTimer extends Handler{
     private int minutesHigh;
     private int halfLength;
     private int minutesPassed;
+    private boolean isSecondHalf;
     private TextView secondsLowView;
     private TextView secondsHighView;
     private TextView minutesLowView;
@@ -26,24 +30,60 @@ public class MyTimer extends Handler{
     private final int MSG_CONTINUE = 2;
     private final int MSG_STOP = 3;
 
-    public MyTimer(int halfLength, Context context) {
+    public MyTimer(Context context) {
         super();
         secondsLow = -1;
         secondsHigh = 0;
         minutesLow = 0;
         minutesHigh = 0;
-        this.halfLength = halfLength;
         minutesPassed = 0;
         mainContext = context;
         isRunning = false;
+        isSecondHalf = false;
+    }
+
+    public void setHalfLength(int halfLength) {
+        this.halfLength = halfLength;
+    }
+
+    public int getHalfLength() {
+        return halfLength;
+    }
+
+    public int getMinutesPassed() {
+        return minutesPassed;
     }
 
     public void start() {
+        SharedPreferences sharedPreferences = mainContext.getSharedPreferences(
+                mainContext.getString(R.string.preferences), Context.MODE_PRIVATE);
+        this.halfLength = sharedPreferences.getInt(mainContext.getString(R.string.preferences_half_length), 45);
+
+        Toast.makeText(mainContext, R.string.timer_started, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mainContext, String.format(mainContext
+                .getString(R.string.change_of_half_length), halfLength),
+                Toast.LENGTH_SHORT).show();
+
+        Log.i("half length preference", String.valueOf(
+                sharedPreferences.getInt(mainContext.getString(R.string.preferences_half_length), 45)));
+
         this.sendEmptyMessage(MSG_START);
     }
 
     public void stop() {
+        Toast.makeText(mainContext, R.string.timer_stopped, Toast.LENGTH_SHORT).show();
+
         this.sendEmptyMessage(MSG_STOP);
+    }
+
+    public void reset() {
+        secondsLow = -1;
+        secondsHigh = 0;
+        minutesLow = 0;
+        minutesHigh = 0;
+        minutesPassed = 0;
+        isRunning = false;
+        isSecondHalf = false;
     }
 
     @Override
@@ -93,7 +133,19 @@ public class MyTimer extends Handler{
         /*int time = Integer.valueOf(minutesHighView.getText().toString()
                 + minutesLowView.getText().toString());*/
         if (minutesPassed == halfLength) {
-            stop();
+            if (isSecondHalf && isRunning) {
+                stop();
+                isSecondHalf = false;
+                View rootView = ((Activity) mainContext).getWindow().getDecorView()
+                        .findViewById(android.R.id.content);
+                LinearLayout timerLayout = (LinearLayout) rootView.findViewById(R.id.timer_layout);
+                timerLayout.setClickable(false);
+                Toast.makeText(mainContext, R.string.match_ended, Toast.LENGTH_LONG).show();
+            } else if (isRunning) {
+                stop();
+                isSecondHalf = true;
+                Toast.makeText(mainContext, R.string.half_ended, Toast.LENGTH_LONG).show();
+            }
         }
     }
 
