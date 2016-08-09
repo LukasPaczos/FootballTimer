@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.event_list);
         adapter = new EventAdapter(this, events);
         listView.setAdapter(adapter);
+        registerForContextMenu(listView);
 
         LinearLayout timerLayout = (LinearLayout) findViewById(R.id.timer_layout);
         timerLayout.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +119,9 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_about) {
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -175,5 +182,71 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = dialogBuilder.create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.event_list) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_event_list, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(final MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final Event event = adapter.getItem(info.position);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        AlertDialog alertDialog;
+        switch (item.getItemId()) {
+            case R.id.menu_event_list_edit:
+                final EditText inputView = new EditText(MainActivity.this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                inputView.setLayoutParams(lp);
+                dialogBuilder.setCancelable(true);
+                dialogBuilder.setTitle(getResources().getString(R.string.event_edit));
+                dialogBuilder.setView(inputView);
+                dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                dialogBuilder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        event.setMsg(inputView.getText().toString());
+                        adapter.notifyDataSetChanged();
+                        dialogInterface.dismiss();
+                    }
+                });
+                alertDialog = dialogBuilder.create();
+                alertDialog.show();
+                break;
+            case R.id.menu_event_list_delete:
+                dialogBuilder.setCancelable(true);
+                dialogBuilder.setTitle(getResources().getString(R.string.event_delete));
+                dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                dialogBuilder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        events.remove(info.position);
+                        adapter.notifyDataSetChanged();
+                        dialogInterface.dismiss();
+                    }
+                });
+                alertDialog = dialogBuilder.create();
+                alertDialog.show();
+                break;
+        }
+        return true;
     }
 }

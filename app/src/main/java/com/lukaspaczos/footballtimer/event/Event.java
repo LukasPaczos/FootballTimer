@@ -34,6 +34,10 @@ public class Event {
         return msg;
     }
 
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
     public static void setupIcons() {
         iconsMap.put(YELLOW_CARD, R.mipmap.ic_yellow_card);
         iconsMap.put(RED_CARD, R.mipmap.ic_red_card);
