@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -277,14 +278,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_about) {
-            //TODO make this shit to look good
-            final TextView textView = new TextView(MainActivity.this);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT);
-            lp.setMargins(16, 16, 16, 16);
-            textView.setLayoutParams(lp);
-            textView.setText(getString(R.string.about_text));
+            final TextView textView = (TextView) getLayoutInflater().inflate(R.layout.about_view, null, false);
+            textView.setText(getText(R.string.about_text));
+            textView.setMovementMethod(new ScrollingMovementMethod());
             new AlertDialog.Builder(this)
                     .setView(textView)
                     .setTitle(getString(R.string.action_about))

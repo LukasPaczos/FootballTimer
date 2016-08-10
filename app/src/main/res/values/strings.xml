@@ -48,12 +48,13 @@
     <string name="event_edit">Edit event message?</string>
     <string name="event_delete">Delete event?</string>
 
-    <string name="about_text">                                    Icon projects:\n
-        <b>Michal Wojtas</b>, <b>Dorota Wojtas</b>\n\n
-                            Coding and everything else:\n
-                            <b>Lukas Paczos</b>\n\n
-    If you find any bugs or maybe you\'d like to share some feedback,
-    feel free to send me an e-mail: lukas.paczos@gmail.com. Thanks!</string>
+    <string name="about_text">Creator and developer:\n
+<b>Lukas Paczos</b>\n\n
+Icon projects:\n
+<b>Michal Wojtas</b>, <b>Dorota Wojtas</b>\n\n
+If you find any bugs or maybe you\'d like to share some feedback,\n
+feel free to send me an e-mail: <b>lukas.paczos@gmail.com</b>\n
+Thanks!</string>
 
     <string name="image_description">EventIcon</string>
     <string name="image_description_yellow_card">YellowCardIcon</string>
@@ -61,6 +62,6 @@
     <string name="image_description_goal">GoalIcon</string>
     <string name="image_description_other">OtherIcon</string>
 
-    <string name="banner_ad_unit_id">ca-app-pub-3158356248600163/1396061131</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3158356248600163/1396061131</string>
 
 </resources>

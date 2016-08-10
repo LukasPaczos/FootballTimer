@@ -28,13 +28,13 @@
     <string name="timer_stopped">Zegar zatrzymany.</string>
     <string name="write_half_length">Długość połowy</string>
     <string name="yes">Tak</string>
-    <string name="about_text">                                    Projekty ikon:\n
-         <b>Michal Wojtas</b>, <b>Dorota Wojtas</b>\n\n
-                              Kodowanie i cała reszta:\n
-                             <b>Lukas Paczos</b>\n\n
-          Jeżeli znajdziesz jakiekolwiek błędy lub chciałbyś podzielić
-          się opinią na temat tej appki, napisz: lukas.paczos@gmail.com.
-                                            Dzięki!</string>
+    <string name="about_text">Twórca i deweloper:\n
+<b>Lukas Paczos</b>\n\n
+Projekty ikon:\n
+<b>Michal Wojtas</b>, <b>Dorota Wojtas</b>\n\n
+Jeżeli znajdziesz jakiekolwiek błędy lub chciałbyś podzielić
+się opinią na temat tej appki, napisz:\n<b>lukas.paczos@gmail.com</b>\n
+Dzięki!</string>
 
     <string-array name="settings_half_length">
         <item>45 minut</item>
