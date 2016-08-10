@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_reset">Reset</string>
+    <string name="action_about">Info</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="add">Dodaj</string>
+    <string name="cancel">Anuluj</string>
+    <string name="change_of_half_length">Długość połowy: %d min</string>
+    <string name="choose_half_length">Wybierz długość połowy (minuty)</string>
+    <string name="confirm">Potwierdź</string>
+    <string name="dialog_goal_title">Kto trafił?</string>
+    <string name="dialog_other_title">Notatka</string>
+    <string name="dialog_red_card_title">Kto otrzymał czerwoną kartkę?</string>
+    <string name="dialog_yellow_card_title">Kto otrzymał żółtą kartkę?</string>
+    <string name="event_delete">Usunąć zdarzenie?</string>
+    <string name="event_edit">Zmienić treść zdarzenia?</string>
+    <string name="half_ended">Koniec pierwszej połowy.</string>
+    <string name="half_lengt_changed">Długość połowy zmieniona na %d min</string>
+    <string name="match_ended">Koniec meczu.</string>
+    <string name="menu_event_list_delete">Usuń</string>
+    <string name="menu_event_list_edit">Zmień</string>
+    <string name="ok">OK</string>
+    <string name="reset_confirmation">Jesteś pewien, że chcesz zresetować?</string>
+    <string name="reset_done">Resetowanie zakończone.</string>
+    <string name="start_timer">Wystartować czas?</string>
+    <string name="stop_timer">Zatrzymać czas?</string>
+    <string name="timer_started">Zegar uruchomiony.</string>
+    <string name="timer_stopped">Zegar zatrzymany.</string>
+    <string name="write_half_length">Długość połowy</string>
+    <string name="yes">Tak</string>
+    <string name="about_text">                                    Projekty ikon:\n
+         <b>Michal Wojtas</b>, <b>Dorota Wojtas</b>\n\n
+                              Kodowanie i cała reszta:\n
+                             <b>Lukas Paczos</b>\n\n
+          Jeżeli znajdziesz jakiekolwiek błędy lub chciałbyś podzielić
+          się opinią na temat tej appki, napisz: lukas.paczos@gmail.com.
+                                            Dzięki!</string>
+
+    <string-array name="settings_half_length">
+        <item>45 minut</item>
+        <item>30 minut</item>
+        <item>20 minut</item>
+        <item>15 minut</item>
+        <item>10 minut</item>
+        <item>5 minut</item>
+        <item>Inna</item>
+    </string-array>
+    <string name="app_name">Football Timer</string>
+    <string name="image_description">ZdarzenieIkona</string>
+    <string name="image_description_goal">GolIkona</string>
+    <string name="image_description_other">InneIkona</string>
+    <string name="image_description_red_card">CzerwonaKartkaIkona</string>
+    <string name="image_description_yellow_card">ŻółtaKartkaIkona</string>
+</resources>

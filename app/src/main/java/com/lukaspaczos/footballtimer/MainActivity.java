@@ -2,13 +2,13 @@ package com.lukaspaczos.footballtimer;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -28,7 +28,6 @@ import com.lukaspaczos.footballtimer.event.Event;
 import com.lukaspaczos.footballtimer.event.EventAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -206,6 +205,9 @@ public class MainActivity extends AppCompatActivity {
                                             LinearLayout.LayoutParams.MATCH_PARENT);
                                     inputView.setLayoutParams(lp);
                                     inputView.setRawInputType(Configuration.KEYBOARD_12KEY);
+                                    inputView.setSingleLine(true);
+                                    inputView.setMaxLines(1);
+                                    inputView.setLines(1);
                                     dialogBuilder.setView(inputView);
                                     dialogBuilder.setCancelable(true);
                                     dialogBuilder.setTitle(getString(R.string.write_half_length));
@@ -215,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                                             dialogInterface.dismiss();
                                         }
                                     });
-                                    dialogBuilder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                                    dialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             dialogInterface.dismiss();
@@ -298,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
         inputView.setLayoutParams(lp);
+        inputView.setFilters(new InputFilter[] { new InputFilter.LengthFilter(40) } );
         switch (type) {
             case Event.YELLOW_CARD:
                 dialogBuilder.setTitle(R.string.dialog_yellow_card_title);
@@ -355,6 +358,7 @@ public class MainActivity extends AppCompatActivity {
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT);
                 inputView.setLayoutParams(lp);
+                inputView.setFilters(new InputFilter[] { new InputFilter.LengthFilter(40) } );
                 dialogBuilder.setCancelable(true);
                 dialogBuilder.setTitle(getResources().getString(R.string.event_edit));
                 dialogBuilder.setView(inputView);
@@ -393,6 +397,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 alertDialog = dialogBuilder.create();
+                alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
                 alertDialog.show();
                 break;
         }
