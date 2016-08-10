@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "49547453626",
+    "firebase_url": "https://football-timer-db55d.firebaseio.com",
+    "project_id": "football-timer-db55d",
+    "storage_bucket": "football-timer-db55d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49547453626:android:a3d8ca7dae08bdc3",
+        "android_client_info": {
+          "package_name": "com.lukaspaczos.footballtimer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "49547453626-a9fca6dodh3fhop8ha97b4rd0e9l6b19.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmlPVCYUtA4h0AvnM-jagKNJOjN0asw5M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

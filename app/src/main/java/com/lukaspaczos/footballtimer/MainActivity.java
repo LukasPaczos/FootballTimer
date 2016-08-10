@@ -24,17 +24,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.lukaspaczos.footballtimer.event.Event;
 import com.lukaspaczos.footballtimer.event.EventAdapter;
 
 import java.util.ArrayList;
 
+//TODO comment code
 public class MainActivity extends AppCompatActivity {
 
     private MyTimer myTimer;
     private ListView listView;
     private ArrayList<Event> events;
     private EventAdapter adapter;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
+
+        adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        //TODO remove before store upload
+        //adView.loadAd(adRequest);
 
         myTimer = new MyTimer(this);
         myTimer.setViews((TextView) findViewById(R.id.seconds_low), (TextView) findViewById(R.id.seconds_high),
@@ -101,6 +113,18 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView buttonOther = (ImageView) findViewById(R.id.button_other);
         buttonOther.setOnClickListener(new buttonOnClickListener());
+    }
+
+    @Override
+    protected void onPause() {
+        adView.pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adView.resume();
     }
 
     @Override
