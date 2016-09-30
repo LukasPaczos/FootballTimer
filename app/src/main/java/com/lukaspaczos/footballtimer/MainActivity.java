@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StatFs;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,10 +30,20 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.lukaspaczos.footballtimer.event.Event;
 import com.lukaspaczos.footballtimer.event.EventAdapter;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 //TODO comment code
 public class MainActivity extends AppCompatActivity {
@@ -178,49 +190,49 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             dialog.dismiss();
-                            int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                            int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
                             switch (selectedPosition) {
                                 case 0:
                                     editor.putInt(MainActivity.this.getResources()
                                             .getString(R.string.preferences_half_length), 45);
                                     myTimer.setHalfLength(45);
                                     Toast.makeText(MainActivity.this, String.format(getString(
-                                            R.string.half_lengt_changed), 45), Toast.LENGTH_SHORT).show();
+                                            R.string.half_length_changed), 45), Toast.LENGTH_SHORT).show();
                                     break;
                                 case 1:
                                     editor.putInt(MainActivity.this.getResources()
                                             .getString(R.string.preferences_half_length), 30);
                                     myTimer.setHalfLength(30);
                                     Toast.makeText(MainActivity.this, String.format(getString(
-                                            R.string.half_lengt_changed), 30), Toast.LENGTH_SHORT).show();
+                                            R.string.half_length_changed), 30), Toast.LENGTH_SHORT).show();
                                     break;
                                 case 2:
                                     editor.putInt(MainActivity.this.getResources()
                                             .getString(R.string.preferences_half_length), 20);
                                     myTimer.setHalfLength(20);
                                     Toast.makeText(MainActivity.this, String.format(getString(
-                                            R.string.half_lengt_changed), 20), Toast.LENGTH_SHORT).show();
+                                            R.string.half_length_changed), 20), Toast.LENGTH_SHORT).show();
                                     break;
                                 case 3:
                                     editor.putInt(MainActivity.this.getResources()
                                             .getString(R.string.preferences_half_length), 15);
                                     myTimer.setHalfLength(15);
                                     Toast.makeText(MainActivity.this, String.format(getString(
-                                            R.string.half_lengt_changed), 15), Toast.LENGTH_SHORT).show();
+                                            R.string.half_length_changed), 15), Toast.LENGTH_SHORT).show();
                                     break;
                                 case 4:
                                     editor.putInt(MainActivity.this.getResources()
                                             .getString(R.string.preferences_half_length), 10);
                                     myTimer.setHalfLength(10);
                                     Toast.makeText(MainActivity.this, String.format(getString(
-                                            R.string.half_lengt_changed), 10), Toast.LENGTH_SHORT).show();
+                                            R.string.half_length_changed), 10), Toast.LENGTH_SHORT).show();
                                     break;
                                 case 5:
                                     editor.putInt(MainActivity.this.getResources()
                                             .getString(R.string.preferences_half_length), 5);
                                     myTimer.setHalfLength(5);
                                     Toast.makeText(MainActivity.this, String.format(getString(
-                                            R.string.half_lengt_changed), 5), Toast.LENGTH_SHORT).show();
+                                            R.string.half_length_changed), 5), Toast.LENGTH_SHORT).show();
                                     break;
                                 case 6:
                                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -248,12 +260,12 @@ public class MainActivity extends AppCompatActivity {
                                             dialogInterface.dismiss();
                                             int time = Double.valueOf(inputView.getText().toString()).intValue();
                                             editor.putInt(MainActivity.this.getResources()
-                                                    .getString(R.string.preferences_half_length),
+                                                            .getString(R.string.preferences_half_length),
                                                     time);
                                             editor.apply();
                                             myTimer.setHalfLength(time);
                                             Toast.makeText(MainActivity.this, String.format(getString(
-                                                    R.string.half_lengt_changed), time), Toast.LENGTH_SHORT).show();
+                                                    R.string.half_length_changed), time), Toast.LENGTH_SHORT).show();
                                             Log.i("half length preference", String.valueOf(
                                                     sharedPref.getInt(getString(R.string.preferences_half_length), 45)));
                                         }
@@ -294,6 +306,69 @@ public class MainActivity extends AppCompatActivity {
                     .show();
             return true;
         }
+        if (id == R.id.action_export) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.export_confirmation))
+                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+                            String date = df.format(Calendar.getInstance().getTime());
+                            Log.i("date", date);
+                            String filename = date + ".json";
+                            File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/FootballTimerReports");
+
+                            Boolean isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+                            if (isSDPresent) {
+                                StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+                                long bytesAvailable = stat.getBlockSizeLong() * stat.getAvailableBlocksLong();
+                                long megAvailable = bytesAvailable / 1048576;
+                                if (megAvailable >= 1) {
+                                    //directory = new File(Environment.getExternalStorageDirectory().getPath() + "/FootballTimerReports/");
+                                } else {
+                                    Toast.makeText(MainActivity.this, getString(
+                                            R.string.export_failed_no_space), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            try {
+                                //TODO thise shitte
+                                Log.i("save_path", directory.getPath());
+                                boolean success = true;
+                                if (!directory.exists()) {
+                                    Log.i("save_directory", "creating");
+                                    success = directory.mkdirs();
+                                }
+                                if (success) {
+                                    File outputFile = new File(directory, filename);
+                                    FileWriter writer = new FileWriter(outputFile);
+                                    Gson gson = new GsonBuilder().create();
+                                    gson.toJson(events, writer);
+                                    writer.flush();
+                                    writer.close();
+                                    Log.i("report", "saved on SD");
+                                    Toast.makeText(MainActivity.this, getString(
+                                            R.string.export_saved), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(MainActivity.this, getString(
+                                            R.string.export_failed_no_directory), Toast.LENGTH_SHORT).show();
+                                    Log.i("save_directory", "couldnt create");
+                                }
+                            } catch (IOException e) {
+                                Log.i("IOException", e.getMessage());
+                                Toast.makeText(MainActivity.this, getString(
+                                        R.string.export_failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .setCancelable(true)
+                    .show();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -320,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
         inputView.setLayoutParams(lp);
-        inputView.setFilters(new InputFilter[] { new InputFilter.LengthFilter(40) } );
+        inputView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(40)});
         switch (type) {
             case Event.YELLOW_CARD:
                 dialogBuilder.setTitle(R.string.dialog_yellow_card_title);
@@ -378,7 +453,7 @@ public class MainActivity extends AppCompatActivity {
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT);
                 inputView.setLayoutParams(lp);
-                inputView.setFilters(new InputFilter[] { new InputFilter.LengthFilter(40) } );
+                inputView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(40)});
                 dialogBuilder.setCancelable(true);
                 dialogBuilder.setTitle(getResources().getString(R.string.event_edit));
                 dialogBuilder.setView(inputView);

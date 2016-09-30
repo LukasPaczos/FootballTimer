@@ -15,7 +15,6 @@
     <string name="event_delete">Usunąć zdarzenie?</string>
     <string name="event_edit">Zmienić treść zdarzenia?</string>
     <string name="half_ended">Koniec pierwszej połowy.</string>
-    <string name="half_lengt_changed">Długość połowy zmieniona na %d min</string>
     <string name="match_ended">Koniec meczu.</string>
     <string name="menu_event_list_delete">Usuń</string>
     <string name="menu_event_list_edit">Zmień</string>
@@ -51,4 +50,11 @@ Dzięki!</string>
     <string name="image_description_other">InneIkona</string>
     <string name="image_description_red_card">CzerwonaKartkaIkona</string>
     <string name="image_description_yellow_card">ŻółtaKartkaIkona</string>
+    <string name="action_export">Eksportuj</string>
+    <string name="half_length_changed">Długość połowy zmieniona na %d min</string>
+    <string name="export_confirmation">Zapisać raport do pliku?</string>
+    <string name="export_failed">Zapis nieudany.</string>
+    <string name="export_failed_no_directory">Zapis nieudany. Nie można utworzyć folderu.</string>
+    <string name="export_failed_no_space">Zapis nieudany. Brak pamięci.</string>
+    <string name="export_saved">Zapisano w folderze Dokumenty.</string>
 </resources>

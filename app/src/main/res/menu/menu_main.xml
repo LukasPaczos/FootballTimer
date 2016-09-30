@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.lukaspaczos.footballtimer.MainActivity">
     <item
+        android:id="@+id/action_export"
+        android:orderInCategory="10"
+        android:title="@string/action_export"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_mail_outline_white_24px"/>
+    <item
         android:id="@+id/action_reset"
         android:orderInCategory="50"
         android:title="@string/action_reset"

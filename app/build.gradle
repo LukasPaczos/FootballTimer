@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "com.lukaspaczos.footballtimer"
         minSdkVersion 19
-        targetSdkVersion 24
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }
@@ -26,6 +26,10 @@ dependencies {
     compile 'com.android.support:design:24.1.1'
     compile 'com.android.support:support-v4:24.1.1'
 	compile 'com.google.firebase:firebase-ads:9.4.0'
+    compile 'com.google.code.gson:gson:2.4'
+
+    //errors with gradle :(
+    //compile "json-to-pdf:json-to-pdf:0.7.6"
 }
 
 apply plugin: 'com.google.gms.google-services'
